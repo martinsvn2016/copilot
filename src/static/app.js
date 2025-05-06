@@ -80,14 +80,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (response.ok) {
         messageDiv.textContent = result.message;
-        messageDiv.className = "success";
+        messageDiv.classList.remove("error", "info", "hidden");
+        messageDiv.classList.add("success");
         signupForm.reset();
+        // 刷新活动列表，显示最新参与者
+        fetchActivities();
       } else {
         messageDiv.textContent = result.detail || "An error occurred";
-        messageDiv.className = "error";
+        messageDiv.classList.remove("success", "info", "hidden");
+        messageDiv.classList.add("error");
       }
-
-      messageDiv.classList.remove("hidden");
 
       // Hide message after 5 seconds
       setTimeout(() => {
@@ -95,9 +97,12 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 5000);
     } catch (error) {
       messageDiv.textContent = "Failed to sign up. Please try again.";
-      messageDiv.className = "error";
-      messageDiv.classList.remove("hidden");
+      messageDiv.classList.remove("success", "info", "hidden");
+      messageDiv.classList.add("error");
       console.error("Error signing up:", error);
+      setTimeout(() => {
+        messageDiv.classList.add("hidden");
+      }, 5000);
     }
   });
 
